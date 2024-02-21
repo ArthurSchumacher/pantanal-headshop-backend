@@ -19,7 +19,9 @@ export class UserService {
       const user = this.repo.create(createUserDto);
       return await this.repo.save(user);
     } catch (error) {
-      throw new ConflictException('Falha ao cadastrar usuário.');
+      throw new ConflictException(
+        `Falha ao cadastrar usuário. e: ${error.message}`,
+      );
     }
   }
 
@@ -31,7 +33,9 @@ export class UserService {
     try {
       return await this.repo.findOne({ where: { id } });
     } catch (error) {
-      throw new NotFoundException('Falha ao encontrar usuário.');
+      throw new NotFoundException(
+        `Falha ao encontrar usuário. e: ${error.message}`,
+      );
     }
   }
 
@@ -41,7 +45,9 @@ export class UserService {
       Object.assign(user, updateUserDto);
       return await this.repo.save(user);
     } catch (error) {
-      throw new BadRequestException('Falha ao atualizar usuário.');
+      throw new BadRequestException(
+        `Falha ao atualizar usuário. e: ${error.message}`,
+      );
     }
   }
 
@@ -50,7 +56,9 @@ export class UserService {
       const user = await this.findOne(id);
       return this.repo.remove(user);
     } catch (error) {
-      throw new BadRequestException('Falha ao remover usuário.');
+      throw new BadRequestException(
+        `Falha ao remover usuário. e: ${error.message}`,
+      );
     }
   }
 }

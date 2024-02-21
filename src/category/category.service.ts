@@ -19,7 +19,9 @@ export class CategoryService {
       const category = this.repo.create(createCategoryDto);
       return await this.repo.save(category);
     } catch (error) {
-      throw new ConflictException('Falha ao cadastrar categoria.');
+      throw new ConflictException(
+        `Falha ao cadastrar categoria. e: ${error.message}`,
+      );
     }
   }
 
@@ -31,7 +33,9 @@ export class CategoryService {
     try {
       return await this.repo.findOne({ where: { id } });
     } catch (error) {
-      throw new NotFoundException('Falha ao encontrar categoria.');
+      throw new NotFoundException(
+        `Falha ao encontrar categoria. e: ${error.message}`,
+      );
     }
   }
 
@@ -40,7 +44,9 @@ export class CategoryService {
       await this.repo.update(id, updateCategoryDto);
       return this.findOne(id);
     } catch (error) {
-      throw new BadRequestException('Falha ao atualizar categoria.');
+      throw new BadRequestException(
+        `Falha ao atualizar categoria. e: ${error.message}`,
+      );
     }
   }
 
@@ -49,7 +55,9 @@ export class CategoryService {
       const category = await this.findOne(id);
       return await this.repo.remove(category);
     } catch (error) {
-      throw new BadRequestException('Falha ao remover categoria.');
+      throw new BadRequestException(
+        `Falha ao remover categoria. e: ${error.message}`,
+      );
     }
   }
 }
