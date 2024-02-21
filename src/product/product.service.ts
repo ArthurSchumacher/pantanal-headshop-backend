@@ -127,17 +127,6 @@ export class ProductService {
         throw new NotFoundException(`Falha ao encontrar produto.`);
       }
 
-      let imagePath: string | undefined;
-      if (image) {
-        const { data } = await this.supabaseService
-          .getSupabaseClient()
-          .storage.from('images')
-          .upload(image.originalname, image.buffer, {
-            upsert: true,
-          });
-        imagePath = data.path;
-      }
-
       Object.assign(product, {
         name: updateProductDto.name,
         price: +updateProductDto.price,
@@ -146,12 +135,6 @@ export class ProductService {
         sale: updateProductDto.sale,
         discount: +updateProductDto.discount,
       });
-
-      if (imagePath) {
-        Object.assign(product, {
-          image: imagePath,
-        });
-      }
 
       if (updateProductDto.categoryId !== product.category.id) {
         const category = await this.categoryService.findOne(
@@ -163,6 +146,18 @@ export class ProductService {
         }
 
         product.category = category;
+      }
+
+      if (image) {
+        const { data } = await this.supabaseService
+          .getSupabaseClient()
+          .storage.from('images')
+          .upload(image.originalname, image.buffer, {
+            upsert: true,
+          });
+        Object.assign(product, {
+          image: data.path,
+        });
       }
 
       return await this.repo.save(product);
