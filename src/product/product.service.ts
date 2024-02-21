@@ -46,7 +46,7 @@ export class ProductService {
       return await this.repo.save(product);
     } catch (error) {
       throw new BadRequestException(
-        `Falha ao cadastrar produto. Erro: ${error.message}`,
+        `Falha ao cadastrar produto. e: ${error.message}`,
       );
     }
   }
@@ -70,7 +70,7 @@ export class ProductService {
       return productsWithSignedUrls;
     } catch (error) {
       throw new BadRequestException(
-        `Falha ao buscar produtos. Erro: ${error.message}`,
+        `Falha ao buscar produtos. e: ${error.message}`,
       );
     }
   }
@@ -100,19 +100,19 @@ export class ProductService {
       return productsWithSignedUrls;
     } catch (error) {
       throw new BadRequestException(
-        `Falha ao buscar produtos. Erro: ${error.message}`,
+        `Falha ao buscar produtos. e: ${error.message}`,
       );
     }
   }
 
   async findOne(id: string) {
-    const product = await this.repo.findOne({ where: { id } });
-
-    if (!product) {
-      throw new NotFoundException('Falha ao encontrar produto.');
+    try {
+      return await this.repo.findOne({ where: { id } });
+    } catch (error) {
+      throw new NotFoundException(
+        `Falha ao encontrar produto. e: ${error.message}`,
+      );
     }
-
-    return product;
   }
 
   async update(
@@ -178,7 +178,9 @@ export class ProductService {
       const product = await this.findOne(id);
       return await this.repo.remove(product);
     } catch (error) {
-      throw new BadRequestException('Falha ao remover produto.');
+      throw new BadRequestException(
+        `Falha ao remover produto. e: ${error.message}`,
+      );
     }
   }
 }
