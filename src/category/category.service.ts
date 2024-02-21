@@ -28,11 +28,13 @@ export class CategoryService {
   }
 
   async findOne(id: string) {
-    try {
-      return await this.repo.findOne({ where: { id } });
-    } catch (error) {
+    const category = await this.repo.findOne({ where: { id } });
+
+    if (!category) {
       throw new NotFoundException('Falha ao encontrar categoria.');
     }
+
+    return category;
   }
 
   async update(id: string, updateCategoryDto: UpdateCategoryDto) {

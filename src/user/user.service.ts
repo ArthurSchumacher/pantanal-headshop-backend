@@ -31,7 +31,7 @@ export class UserService {
     try {
       return await this.repo.findOne({ where: { id } });
     } catch (error) {
-      throw new NotFoundException('Falha ao encontrar usuário.');
+      throw new NotFoundException('Falha ao buscar usuário.');
     }
   }
 
