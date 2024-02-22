@@ -15,7 +15,7 @@ export class CreateUserDto {
   @IsString()
   cpf: string;
 
-  @IsPhoneNumber()
+  @IsPhoneNumber('BR')
   phone: string;
 
   @IsString()

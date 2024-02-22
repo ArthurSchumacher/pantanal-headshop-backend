@@ -12,7 +12,10 @@ import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { CategoryDto } from './dto/category.dto';
 
+@Serialize(CategoryDto)
 @UseGuards(AdminGuard)
 @Controller('category')
 export class CategoryController {
