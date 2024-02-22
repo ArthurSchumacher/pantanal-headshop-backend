@@ -10,7 +10,10 @@ import {
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { UserDto } from './dto/user.dto';
 
+@Serialize(UserDto)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
