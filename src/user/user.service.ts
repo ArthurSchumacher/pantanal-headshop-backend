@@ -4,11 +4,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -39,10 +40,26 @@ export class UserService {
     }
   }
 
+  async findOneByEmail(email: string) {
+    try {
+      return await this.repo.findOne({ where: { email } });
+    } catch (error) {
+      throw new NotFoundException(
+        `Falha ao encontrar usuário. e: ${error.message}`,
+      );
+    }
+  }
+
   async update(id: string, updateUserDto: UpdateUserDto) {
     try {
       const user = await this.findOne(id);
-      Object.assign(user, updateUserDto);
+      const salt = await bcrypt.genSalt();
+
+      Object.assign(user, {
+        ...updateUserDto,
+        password: await bcrypt.hash(updateUserDto.password, salt),
+      });
+
       return await this.repo.save(user);
     } catch (error) {
       throw new BadRequestException(

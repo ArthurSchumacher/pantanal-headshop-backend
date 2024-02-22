@@ -13,6 +13,7 @@ import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Public } from 'src/auth/decorators/is-public.decorator';
 
 @Controller('product')
 export class ProductController {
@@ -27,16 +28,19 @@ export class ProductController {
     return this.productService.create(createProductDto, image);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.productService.findAll();
   }
 
+  @Public()
   @Get('/category/:categoryId')
   findAllByCategory(@Param('categoryId') categoryId: string) {
     return this.productService.findAllByCategory(categoryId);
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productService.findOne(id);
