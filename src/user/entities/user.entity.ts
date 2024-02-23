@@ -2,10 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ROLE } from '../enums/role.enum';
+import { Address } from 'src/address/entities/address.entity';
 
 @Entity()
 export class User {
@@ -35,4 +37,7 @@ export class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(() => Address, (address) => address.user)
+  addresses: Address[];
 }

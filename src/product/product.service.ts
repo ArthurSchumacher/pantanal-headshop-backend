@@ -107,7 +107,15 @@ export class ProductService {
 
   async findOne(id: string) {
     try {
-      return await this.repo.findOne({ where: { id } });
+      const product = await this.repo.findOne({ where: { id } });
+      const { data } = await this.supabaseService
+        .getSupabaseClient()
+        .storage.from('images')
+        .createSignedUrl(`${product.image}`, 60);
+
+      product.image = data.signedUrl;
+
+      return product;
     } catch (error) {
       throw new NotFoundException(
         `Falha ao encontrar produto. e: ${error.message}`,
