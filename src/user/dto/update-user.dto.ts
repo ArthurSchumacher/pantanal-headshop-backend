@@ -16,7 +16,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsEmail()
   email: string;
 
-  @IsPhoneNumber()
+  @IsPhoneNumber('BR')
   phone: string;
 
   @IsString()

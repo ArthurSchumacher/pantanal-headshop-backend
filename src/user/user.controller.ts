@@ -31,12 +31,13 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
-  @Serialize(UserDto)
+  @Serialize(UserDetailsDto)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
   }
 
+  @Serialize(UserDto)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(id);

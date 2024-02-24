@@ -17,5 +17,5 @@ export class UserDetailsDto {
   phone: string;
 
   @Expose()
-  password: string;
+  typeUser: number;
 }
