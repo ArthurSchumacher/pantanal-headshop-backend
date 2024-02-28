@@ -99,7 +99,7 @@ export class ProductService {
     image?: Express.Multer.File,
   ) {
     try {
-      const product = await this.findOne(id);
+      const product = await this.repo.findOne({ where: { id } });
 
       if (!product) {
         throw new NotFoundException(`Falha ao encontrar produto.`);
