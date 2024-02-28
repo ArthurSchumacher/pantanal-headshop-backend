@@ -78,6 +78,11 @@ export class ProductService {
   async findOne(id: number) {
     try {
       const product = await this.repo.findOne({ where: { id } });
+
+      if (!product) {
+        throw new NotFoundException('Produto não encontrado.');
+      }
+
       const { data } = await this.supabaseService
         .getSupabaseClient()
         .storage.from('images')

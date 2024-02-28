@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { AddItemToCartDto } from 'src/cart/dto/add-item-to-cart.dto';
 import { Cart } from 'src/cart/entities/cart.entity';
 import { ProductService } from 'src/product/product.service';
+import { UpdateItemToCartDto } from 'src/cart/dto/update-item-to-cart.dto';
 
 @Injectable()
 export class CartProductService {
@@ -27,7 +28,7 @@ export class CartProductService {
     });
 
     if (!cartProduct) {
-      throw new NotFoundException('Product not found in cart.');
+      throw new NotFoundException('Produto não encontrado no carrinho.');
     }
 
     return cartProduct;
@@ -66,5 +67,43 @@ export class CartProductService {
     });
   }
 
-  //   async removeProduct(productId: number);
+  async updateProduct(
+    updateItemToCartDto: UpdateItemToCartDto,
+    cart: Cart,
+  ): Promise<CartProduct> {
+    await this.productService.findOne(updateItemToCartDto.productId);
+
+    const cartProduct = await this.findOne(
+      cart.id,
+      updateItemToCartDto.productId,
+    );
+
+    if (!cartProduct) {
+      throw new NotFoundException('Produto não encontrado no carrinho.');
+    }
+
+    return this.cartProductRepo.save({
+      ...cartProduct,
+      amount: updateItemToCartDto.amount,
+    });
+  }
+
+  async removeProduct(productId: number, cartId: string) {
+    const cartProduct = await this.cartProductRepo.findOne({
+      where: {
+        product: { id: productId },
+        cart: { id: cartId },
+      },
+    });
+
+    if (!cartProduct) {
+      throw new NotFoundException('Produto não encontrado no carrinho.');
+    }
+
+    await this.cartProductRepo.remove(cartProduct);
+
+    return {
+      message: `Produto ${productId} removido com sucesso.`,
+    };
+  }
 }

@@ -12,7 +12,6 @@ export class CartDto {
   @Expose()
   _count: number;
 
-  //   @Expose()
-  //   @Type(() => UserDto)
-  //   user: UserDto;
+  @Expose()
+  message: string;
 }

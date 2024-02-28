@@ -4,6 +4,7 @@ import { Cart } from './entities/cart.entity';
 import { Repository } from 'typeorm';
 import { AddItemToCartDto } from './dto/add-item-to-cart.dto';
 import { CartProductService } from 'src/cart-product/cart-product.service';
+import { UpdateItemToCartDto } from './dto/update-item-to-cart.dto';
 
 @Injectable()
 export class CartService {
@@ -50,7 +51,7 @@ export class CartService {
     });
   }
 
-  async insertItem(
+  async createItem(
     userId: string,
     addItemToCartDto: AddItemToCartDto,
   ): Promise<Cart> {
@@ -63,9 +64,24 @@ export class CartService {
     return cart;
   }
 
+  async updateItem(userId: string, updateItemToCartDto: UpdateItemToCartDto) {
+    const cart = await this.findOne(userId).catch(async () => {
+      return this.create(userId);
+    });
+
+    await this.cartProductService.updateProduct(updateItemToCartDto, cart);
+
+    return cart;
+  }
+
   async remove(userId: string): Promise<Cart> {
     const cart = await this.findOne(userId);
     cart.isActive = false;
     return this.cartRepo.save(cart);
+  }
+
+  async removeItem(userId: string, productId: number) {
+    const cart = await this.findOne(userId);
+    return await this.cartProductService.removeProduct(productId, cart.id);
   }
 }
