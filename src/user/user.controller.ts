@@ -18,9 +18,9 @@ import { UserDetailsDto } from './dto/user-details.dto';
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @Get()
   @Serialize(UserDto)
   @UseGuards(AdminGuard)
+  @Get()
   findAll() {
     return this.userService.findAll();
   }

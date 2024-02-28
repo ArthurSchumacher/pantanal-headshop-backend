@@ -6,13 +6,17 @@ import { Request } from 'express';
 import { Public } from './decorators/is-public.decorator';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from 'src/user/dto/user.dto';
+import { UserService } from 'src/user/user.service';
 
 @Controller('auth')
+@Serialize(UserDto)
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+  ) {}
 
   @Public()
-  @Serialize(UserDto)
   @Post('signup')
   signUp(@Body() createUserDto: CreateUserDto) {
     return this.authService.signUp(createUserDto);
@@ -26,6 +30,6 @@ export class AuthController {
 
   @Get('whoami')
   getProfile(@Req() req: Request) {
-    return req['user'];
+    return this.userService.findOne(req['user'].sub);
   }
 }

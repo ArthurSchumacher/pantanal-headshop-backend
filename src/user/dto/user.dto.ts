@@ -6,4 +6,10 @@ export class UserDto {
 
   @Expose()
   name: string;
+
+  @Expose()
+  typeUser: number;
+
+  @Expose()
+  access_token?: string;
 }
