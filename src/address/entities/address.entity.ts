@@ -18,8 +18,8 @@ export class Address {
   @Column()
   district: string;
 
-  @Column({ nullable: true })
-  complement: string;
+  @Column()
+  complement?: string;
 
   @Column()
   city: string;

@@ -75,36 +75,6 @@ export class ProductService {
     }
   }
 
-  async findAllByCategory(categoryId: string) {
-    try {
-      const products = await this.repo.find({
-        where: {
-          category: {
-            id: categoryId,
-          },
-        },
-      });
-
-      const signedUrlPromises = products.map(async (product) => {
-        const { data } = await this.supabaseService
-          .getSupabaseClient()
-          .storage.from('images')
-          .createSignedUrl(`${product.image}`, 60);
-
-        product.image = data.signedUrl;
-        return product;
-      });
-
-      const productsWithSignedUrls = await Promise.all(signedUrlPromises);
-
-      return productsWithSignedUrls;
-    } catch (error) {
-      throw new BadRequestException(
-        `Falha ao buscar produtos. e: ${error.message}`,
-      );
-    }
-  }
-
   async findOne(id: string) {
     try {
       const product = await this.repo.findOne({ where: { id } });
@@ -178,7 +148,7 @@ export class ProductService {
 
   async remove(id: string) {
     try {
-      const product = await this.findOne(id);
+      const product = await this.repo.findOne({ where: { id } });
       return await this.repo.remove(product);
     } catch (error) {
       throw new BadRequestException(

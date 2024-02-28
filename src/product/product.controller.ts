@@ -29,7 +29,7 @@ export class ProductController {
   @UseInterceptors(FileInterceptor('image'))
   create(
     @Body() createProductDto: CreateProductDto,
-    @UploadedFile() image: Express.Multer.File,
+    @UploadedFile() image?: Express.Multer.File,
   ) {
     return this.productService.create(createProductDto, image);
   }
@@ -38,12 +38,6 @@ export class ProductController {
   @Get()
   findAll() {
     return this.productService.findAll();
-  }
-
-  @Public()
-  @Get('/category/:categoryId')
-  findAllByCategory(@Param('categoryId') categoryId: string) {
-    return this.productService.findAllByCategory(categoryId);
   }
 
   @Public()
