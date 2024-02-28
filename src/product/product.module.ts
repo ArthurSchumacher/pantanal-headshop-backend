@@ -11,5 +11,6 @@ import { SupabaseService } from 'src/supabase.service';
   imports: [TypeOrmModule.forFeature([Product, Category])],
   controllers: [ProductController],
   providers: [ProductService, CategoryService, SupabaseService],
+  exports: [ProductService],
 })
 export class ProductModule {}

@@ -16,8 +16,11 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Public } from 'src/auth/decorators/is-public.decorator';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { ProductDto } from './dto/product.dto';
 
 @Controller('product')
+@Serialize(ProductDto)
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 

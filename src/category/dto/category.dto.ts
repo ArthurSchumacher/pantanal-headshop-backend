@@ -9,7 +9,4 @@ export class CategoryDto {
 
   @Expose()
   created_at: Date;
-
-  @Expose()
-  updated_at: Date;
 }

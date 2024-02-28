@@ -11,6 +11,8 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { JwtGuard } from './auth/guards/jwt.guard';
 import { AddressModule } from './address/address.module';
+import { CartModule } from './cart/cart.module';
+import { CartProductModule } from './cart-product/cart-product.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { AddressModule } from './address/address.module';
     ProductModule,
     AuthModule,
     AddressModule,
+    CartModule,
+    CartProductModule,
   ],
   controllers: [AppController],
   providers: [

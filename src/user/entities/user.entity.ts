@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { ROLE } from '../enums/role.enum';
 import { Address } from 'src/address/entities/address.entity';
+import { Cart } from 'src/cart/entities/cart.entity';
 
 @Entity()
 export class User {
@@ -40,4 +41,7 @@ export class User {
 
   @OneToMany(() => Address, (address) => address.user)
   addresses: Address[];
+
+  @OneToMany(() => Cart, (cart) => cart.user)
+  carts: Cart[];
 }
