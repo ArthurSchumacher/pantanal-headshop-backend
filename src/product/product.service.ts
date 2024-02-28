@@ -75,7 +75,7 @@ export class ProductService {
     }
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     try {
       const product = await this.repo.findOne({ where: { id } });
       const { data } = await this.supabaseService
@@ -94,7 +94,7 @@ export class ProductService {
   }
 
   async update(
-    id: string,
+    id: number,
     updateProductDto: UpdateProductDto,
     image?: Express.Multer.File,
   ) {
@@ -146,7 +146,7 @@ export class ProductService {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: number) {
     try {
       const product = await this.repo.findOne({ where: { id } });
       return await this.repo.remove(product);

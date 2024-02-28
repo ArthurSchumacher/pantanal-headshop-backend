@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Post, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Req } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { AddItemToCartDto } from './dto/add-item-to-cart.dto';
 import { Request } from 'express';
@@ -13,6 +13,11 @@ export class CartController {
   @Post()
   create(@Body() addItemToCartDto: AddItemToCartDto, @Req() req: Request) {
     return this.cartService.insertItem(req['user'].sub, addItemToCartDto);
+  }
+
+  @Get()
+  findOne(@Req() req: Request) {
+    return this.cartService.findOne(req['user'].sub, true);
   }
 
   @Delete()

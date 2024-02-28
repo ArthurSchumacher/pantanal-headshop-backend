@@ -14,7 +14,7 @@ export class CartProductService {
     private productService: ProductService,
   ) {}
 
-  async findOne(cartId: string, productId: string): Promise<CartProduct> {
+  async findOne(cartId: string, productId: number): Promise<CartProduct> {
     const cartProduct = await this.cartProductRepo.findOne({
       where: {
         cart: {
@@ -65,4 +65,6 @@ export class CartProductService {
       amount: cartProduct.amount + addItemToCartDto.amount,
     });
   }
+
+  //   async removeProduct(productId: number);
 }

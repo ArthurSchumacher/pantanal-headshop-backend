@@ -60,7 +60,7 @@ export class CartService {
 
     await this.cartProductService.insertProduct(addItemToCartDto, cart);
 
-    return this.findOne(userId, true);
+    return cart;
   }
 
   async remove(userId: string): Promise<Cart> {

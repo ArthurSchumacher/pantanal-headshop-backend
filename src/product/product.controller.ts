@@ -43,7 +43,7 @@ export class ProductController {
   @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.productService.findOne(id);
+    return this.productService.findOne(+id);
   }
 
   @Patch(':id')
@@ -54,12 +54,12 @@ export class ProductController {
     @Body() updateProductDto: UpdateProductDto,
     @UploadedFile() image?: Express.Multer.File,
   ) {
-    return this.productService.update(id, updateProductDto, image);
+    return this.productService.update(+id, updateProductDto, image);
   }
 
   @Delete(':id')
   @UseGuards(AdminGuard)
   remove(@Param('id') id: string) {
-    return this.productService.remove(id);
+    return this.productService.remove(+id);
   }
 }
