@@ -13,6 +13,8 @@ import { JwtGuard } from './auth/guards/jwt.guard';
 import { AddressModule } from './address/address.module';
 import { CartModule } from './cart/cart.module';
 import { CartProductModule } from './cart-product/cart-product.module';
+import { StatusModule } from './status/status.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { CartProductModule } from './cart-product/cart-product.module';
     AddressModule,
     CartModule,
     CartProductModule,
+    StatusModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [
