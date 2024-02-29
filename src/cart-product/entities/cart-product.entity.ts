@@ -23,15 +23,9 @@ export class CartProduct {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => Cart, (cart) => cart.cartProduct, {
-    eager: true,
-    nullable: true,
-  })
+  @ManyToOne(() => Cart, (cart) => cart.cartProduct)
   cart?: Cart;
 
-  @ManyToOne(() => Product, (product) => product.cartProduct, {
-    eager: true,
-    nullable: true,
-  })
+  @ManyToOne(() => Product, (product) => product.cartProduct)
   product?: Product;
 }

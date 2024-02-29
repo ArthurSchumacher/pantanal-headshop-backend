@@ -43,8 +43,8 @@ export class Product {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => Category, (category) => category.products, { eager: true })
-  category: Category;
+  @ManyToOne(() => Category, (category) => category.products)
+  category?: Category;
 
   @OneToMany(() => CartProduct, (cartProduct) => cartProduct.product)
   cartProduct: CartProduct[];

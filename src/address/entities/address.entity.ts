@@ -34,8 +34,8 @@ export class Address {
   @Column()
   uf: string;
 
-  @ManyToOne(() => User, (user) => user.addresses, { eager: true })
-  user: User;
+  @ManyToOne(() => User, (user) => user.addresses)
+  user?: User;
 
   @OneToMany(() => Order, (order) => order.address)
   orders: Order[];

@@ -27,17 +27,17 @@ export class Order {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => User, (user) => user.orders, { eager: true })
-  user: User;
+  @ManyToOne(() => User, (user) => user.orders)
+  user?: User;
 
-  @ManyToOne(() => Address, (address) => address.orders, { eager: true })
-  address: Address;
+  @ManyToOne(() => Address, (address) => address.orders)
+  address?: Address;
 
-  @ManyToOne(() => Payment, (payment) => payment.orders, { eager: true })
-  payment: Payment;
+  @ManyToOne(() => Payment, (payment) => payment.orders)
+  payment?: Payment;
 
-  @ManyToOne(() => Status, (status) => status.orders, { eager: true })
-  status: Status;
+  @ManyToOne(() => Status, (status) => status.orders)
+  status?: Status;
 
   @OneToMany(() => OrderProduct, (orderProduct) => orderProduct.order)
   orderProduct: OrderProduct[];

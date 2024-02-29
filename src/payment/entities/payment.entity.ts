@@ -17,12 +17,6 @@ export abstract class Payment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Status, (status) => status.payments, { eager: true })
-  status: Status;
-
-  @OneToMany(() => Order, (order) => order.payment)
-  orders: Order[];
-
   @Column()
   price: number;
 
@@ -40,4 +34,10 @@ export abstract class Payment {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @ManyToOne(() => Status, (status) => status.payments)
+  status: Status;
+
+  @OneToMany(() => Order, (order) => order.payment)
+  orders: Order[];
 }

@@ -26,15 +26,9 @@ export class OrderProduct {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => Order, (order) => order.orderProduct, {
-    eager: true,
-    nullable: true,
-  })
+  @ManyToOne(() => Order, (order) => order.orderProduct)
   order?: Order;
 
-  @ManyToOne(() => Product, (product) => product.orderProduct, {
-    eager: true,
-    nullable: true,
-  })
+  @ManyToOne(() => Product, (product) => product.orderProduct)
   product?: Product;
 }
