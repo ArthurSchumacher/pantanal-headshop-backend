@@ -1,5 +1,6 @@
 import { CartProduct } from 'src/cart-product/entities/cart-product.entity';
 import { Category } from 'src/category/entities/category.entity';
+import { OrderProduct } from 'src/order-product/entities/order-product.entity';
 import {
   Column,
   CreateDateColumn,
@@ -47,4 +48,7 @@ export class Product {
 
   @OneToMany(() => CartProduct, (cartProduct) => cartProduct.product)
   cartProduct: CartProduct[];
+
+  @OneToMany(() => OrderProduct, (orderProduct) => orderProduct.product)
+  orderProduct: OrderProduct[];
 }

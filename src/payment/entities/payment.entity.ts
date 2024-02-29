@@ -1,9 +1,11 @@
+import { Order } from 'src/order/entities/order.entity';
 import { Status } from 'src/status/entities/status.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   TableInheritance,
   UpdateDateColumn,
@@ -17,6 +19,9 @@ export abstract class Payment {
 
   @ManyToOne(() => Status, (status) => status.payments, { eager: true })
   status: Status;
+
+  @OneToMany(() => Order, (order) => order.payment)
+  orders: Order[];
 
   @Column()
   price: number;

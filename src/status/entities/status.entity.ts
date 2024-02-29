@@ -1,3 +1,4 @@
+import { Order } from 'src/order/entities/order.entity';
 import { Payment } from 'src/payment/entities/payment.entity';
 import {
   Column,
@@ -24,4 +25,7 @@ export class Status {
 
   @OneToMany(() => Payment, (payment) => payment.status)
   payments: Payment[];
+
+  @OneToMany(() => Order, (order) => order.status)
+  orders: Order[];
 }
