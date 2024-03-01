@@ -33,7 +33,7 @@ export class ProductService {
         price: +createProductDto.price,
         description: createProductDto.description,
         stock: +createProductDto.stock,
-        sale: createProductDto.sale,
+        sale: createProductDto.sale.toString() === 'true',
         discount: +createProductDto.discount,
         image: data.path,
       });
@@ -53,7 +53,9 @@ export class ProductService {
 
   async findAll() {
     try {
-      const products = await this.repo.find();
+      const products = await this.repo.find({
+        relations: ['category'],
+      });
 
       const signedUrlPromises = products.map(async (product) => {
         const { data } = await this.supabaseService

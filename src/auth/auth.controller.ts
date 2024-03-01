@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { SignInUserDto } from './dto/sign-in-user.dto';
@@ -6,7 +6,6 @@ import { Public } from './decorators/is-public.decorator';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from 'src/user/dto/user.dto';
 import { UserService } from 'src/user/user.service';
-import { CurrentUser } from './decorators/current-user.decorator';
 
 @Controller('auth')
 @Serialize(UserDto)
@@ -26,10 +25,5 @@ export class AuthController {
   @Post('signin')
   async signIn(@Body() signInDto: SignInUserDto) {
     return await this.authService.signIn(signInDto);
-  }
-
-  @Get('whoami')
-  getProfile(@CurrentUser() user: string) {
-    return this.userService.findOne(user);
   }
 }

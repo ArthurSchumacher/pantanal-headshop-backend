@@ -1,4 +1,5 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
+import { ProductCategoryDto } from 'src/category/dto/product-category.dto';
 
 export class ProductDto {
   @Expose()
@@ -21,4 +22,8 @@ export class ProductDto {
 
   @Expose()
   image: string;
+
+  @Expose()
+  @Type(() => ProductCategoryDto)
+  category: ProductCategoryDto;
 }

@@ -13,6 +13,7 @@ import { AdminGuard } from 'src/auth/guards/admin.guard';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from './dto/user.dto';
 import { UserDetailsDto } from './dto/user-details.dto';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 
 @Controller('user')
 export class UserController {
@@ -26,9 +27,16 @@ export class UserController {
   }
 
   @Serialize(UserDetailsDto)
-  @Get(':id')
+  @UseGuards(AdminGuard)
+  @Get('profile/:id')
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
+  }
+
+  @Serialize(UserDetailsDto)
+  @Get('me')
+  profile(@CurrentUser() user: string) {
+    return this.userService.findOne(user);
   }
 
   @Serialize(UserDetailsDto)

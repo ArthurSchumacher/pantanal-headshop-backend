@@ -19,12 +19,11 @@ export class CreateProductDto {
   stock: number;
 
   @IsBooleanString()
-  @IsOptional()
   sale: boolean;
 
-  @IsNumberString()
   @IsOptional()
-  discount: number;
+  @IsNumberString()
+  discount?: number;
 
   @IsString()
   categoryId: string;

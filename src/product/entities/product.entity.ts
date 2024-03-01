@@ -28,10 +28,10 @@ export class Product {
   @Column()
   stock: number;
 
-  @Column({ default: false })
+  @Column()
   sale: boolean;
 
-  @Column({ default: 0 })
+  @Column({ nullable: true })
   discount: number;
 
   @Column()
