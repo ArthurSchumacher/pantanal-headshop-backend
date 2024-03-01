@@ -3,9 +3,9 @@ import { Payment } from './payment.entity';
 
 @ChildEntity()
 export class PaymentPix extends Payment {
-  @Column()
+  @Column({ nullable: true })
   code: string;
 
-  @Column()
+  @Column({ nullable: true })
   date_payment: Date;
 }

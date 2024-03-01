@@ -6,13 +6,13 @@ import {
   Patch,
   Param,
   Delete,
-  Req,
 } from '@nestjs/common';
 import { AddressService } from './address.service';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { AddressDto } from './dto/address.dto';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 
 @Serialize(AddressDto)
 @Controller('address')
@@ -21,15 +21,15 @@ export class AddressController {
 
   @Post()
   async create(
-    @Req() req: Request,
+    @CurrentUser() user: string,
     @Body() createAddressDto: CreateAddressDto,
   ) {
-    return await this.addressService.create(req['user'].sub, createAddressDto);
+    return await this.addressService.create(user, createAddressDto);
   }
 
   @Get()
-  findAll(@Req() req: Request) {
-    return this.addressService.findAll(req['user'].sub);
+  findAll(@CurrentUser() user: string) {
+    return this.addressService.findAll(user);
   }
 
   @Get(':id')

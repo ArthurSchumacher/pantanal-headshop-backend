@@ -3,6 +3,6 @@ import { Payment } from './payment.entity';
 
 @ChildEntity()
 export class PaymentCreditCard extends Payment {
-  @Column()
+  @Column({ nullable: true })
   amountPayments: number;
 }

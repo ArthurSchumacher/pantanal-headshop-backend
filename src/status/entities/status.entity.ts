@@ -11,8 +11,8 @@ import {
 
 @Entity()
 export class Status {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column({ unique: true })
   name: string;

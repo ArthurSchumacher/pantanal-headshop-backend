@@ -1,12 +1,12 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { SignInUserDto } from './dto/sign-in-user.dto';
-import { Request } from 'express';
 import { Public } from './decorators/is-public.decorator';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from 'src/user/dto/user.dto';
 import { UserService } from 'src/user/user.service';
+import { CurrentUser } from './decorators/current-user.decorator';
 
 @Controller('auth')
 @Serialize(UserDto)
@@ -29,7 +29,7 @@ export class AuthController {
   }
 
   @Get('whoami')
-  getProfile(@Req() req: Request) {
-    return this.userService.findOne(req['user'].sub);
+  getProfile(@CurrentUser() user: string) {
+    return this.userService.findOne(user);
   }
 }
