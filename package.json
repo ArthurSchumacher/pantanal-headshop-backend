@@ -6,8 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "migration:run": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:run -d src/data-source.ts",
     "migration:generate": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:generate -d src/data-source.ts",
-    "typeorm": "ts-node ./node_modules/typeorm/cli.js",
+    "typeorm": "typeorm-ts-node-commonjs -d src/data-source.ts",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
