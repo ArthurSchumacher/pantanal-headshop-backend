@@ -24,5 +24,5 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   password: string;
 
   @IsInt()
-  userType: ROLE;
+  typeUser: ROLE;
 }
