@@ -64,11 +64,10 @@ export class ProductService {
           .createSignedUrl(`${product.image}`, 60);
 
         product.image = data.signedUrl;
-        return product;
+        return { ...product, price: product.price.toFixed(2) };
       });
 
       const productsWithSignedUrls = await Promise.all(signedUrlPromises);
-
       return productsWithSignedUrls;
     } catch (error) {
       throw new BadRequestException(
