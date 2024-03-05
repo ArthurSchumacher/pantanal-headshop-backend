@@ -7,9 +7,11 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CategoryService } from 'src/category/category.service';
 import { SupabaseService } from 'src/supabase.service';
+
+const DEFAULT_SIZE_PER_PAGE = 8;
 
 @Injectable()
 export class ProductService {
@@ -51,29 +53,43 @@ export class ProductService {
     }
   }
 
-  async findAll() {
-    try {
-      const products = await this.repo.find({
-        relations: ['category'],
-      });
+  async findAll(
+    searchTerm?: string,
+    categoryId?: string,
+    size: number = DEFAULT_SIZE_PER_PAGE,
+  ) {
+    let whereClause = {};
 
-      const signedUrlPromises = products.map(async (product) => {
-        const { data } = await this.supabaseService
-          .getSupabaseClient()
-          .storage.from('images')
-          .createSignedUrl(`${product.image}`, 60);
-
-        product.image = data.signedUrl;
-        return { ...product, price: product.price.toFixed(2) };
-      });
-
-      const productsWithSignedUrls = await Promise.all(signedUrlPromises);
-      return productsWithSignedUrls;
-    } catch (error) {
-      throw new BadRequestException(
-        `Falha ao buscar produtos. e: ${error.message}`,
-      );
+    if (searchTerm) {
+      whereClause = { name: Like(`%${searchTerm}%`) };
     }
+
+    if (categoryId) {
+      whereClause = { category: { id: categoryId } };
+    }
+
+    const products = await this.repo.find({
+      where: whereClause,
+      relations: ['category'],
+      take: size,
+    });
+
+    const productsWithSignedUrls = await Promise.all(
+      products.map(async (product) => {
+        const { data } = await this.getSignedUrl(product.image);
+        product.image = data.signedUrl;
+        return product;
+      }),
+    );
+
+    return productsWithSignedUrls;
+  }
+
+  async getSignedUrl(imageName) {
+    return this.supabaseService
+      .getSupabaseClient()
+      .storage.from('images')
+      .createSignedUrl(imageName, 60);
   }
 
   async findOne(id: number) {
@@ -99,11 +115,7 @@ export class ProductService {
     }
   }
 
-  async update(
-    id: number,
-    updateProductDto: UpdateProductDto,
-    image?: Express.Multer.File,
-  ) {
+  async update(id: number, updateProductDto: UpdateProductDto) {
     try {
       const product = await this.repo.findOne({ where: { id } });
 
@@ -116,11 +128,14 @@ export class ProductService {
         price: +updateProductDto.price,
         description: updateProductDto.description,
         stock: +updateProductDto.stock,
-        sale: updateProductDto.sale,
+        sale: Boolean(updateProductDto.sale),
         discount: +updateProductDto.discount,
       });
 
-      if (updateProductDto.categoryId !== product.category.id) {
+      if (
+        updateProductDto.categoryId !==
+        (product.category && product.category.id)
+      ) {
         const category = await this.categoryService.findOne(
           updateProductDto.categoryId,
         );
@@ -130,18 +145,6 @@ export class ProductService {
         }
 
         product.category = category;
-      }
-
-      if (image) {
-        const { data } = await this.supabaseService
-          .getSupabaseClient()
-          .storage.from('images')
-          .upload(image.originalname, image.buffer, {
-            upsert: true,
-          });
-        Object.assign(product, {
-          image: data.path,
-        });
       }
 
       return await this.repo.save(product);

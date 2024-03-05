@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   UploadedFile,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -36,8 +37,12 @@ export class ProductController {
 
   @Public()
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  findAll(
+    @Query('search') search: string,
+    @Query('category') categoryId: string,
+    @Query('size') size: string,
+  ) {
+    return this.productService.findAll(search, categoryId, +size);
   }
 
   @Public()
@@ -48,13 +53,8 @@ export class ProductController {
 
   @Patch(':id')
   @UseGuards(AdminGuard)
-  @UseInterceptors(FileInterceptor('image'))
-  update(
-    @Param('id') id: string,
-    @Body() updateProductDto: UpdateProductDto,
-    @UploadedFile() image?: Express.Multer.File,
-  ) {
-    return this.productService.update(+id, updateProductDto, image);
+  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+    return this.productService.update(+id, updateProductDto);
   }
 
   @Delete(':id')
