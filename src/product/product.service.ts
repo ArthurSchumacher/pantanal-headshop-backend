@@ -11,7 +11,7 @@ import { Like, Repository } from 'typeorm';
 import { CategoryService } from 'src/category/category.service';
 import { SupabaseService } from 'src/supabase.service';
 
-const DEFAULT_SIZE_PER_PAGE = 8;
+const DEFAULT_PAGE_SIZE: number = 8;
 
 @Injectable()
 export class ProductService {
@@ -53,11 +53,7 @@ export class ProductService {
     }
   }
 
-  async findAll(
-    searchTerm?: string,
-    categoryId?: string,
-    size: number = DEFAULT_SIZE_PER_PAGE,
-  ) {
+  async findAll(searchTerm?: string, categoryId?: string, size?: number) {
     let whereClause = {};
 
     if (searchTerm) {
@@ -71,7 +67,7 @@ export class ProductService {
     const products = await this.repo.find({
       where: whereClause,
       relations: ['category'],
-      take: size,
+      take: size ? size : DEFAULT_PAGE_SIZE,
     });
 
     const productsWithSignedUrls = await Promise.all(

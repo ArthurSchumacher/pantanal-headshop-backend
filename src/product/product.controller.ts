@@ -40,7 +40,7 @@ export class ProductController {
   findAll(
     @Query('search') search: string,
     @Query('category') categoryId: string,
-    @Query('size') size: string,
+    @Query('size') size?: string,
   ) {
     return this.productService.findAll(search, categoryId, +size);
   }
