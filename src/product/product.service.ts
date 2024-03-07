@@ -90,7 +90,10 @@ export class ProductService {
 
   async findOne(id: number) {
     try {
-      const product = await this.repo.findOne({ where: { id } });
+      const product = await this.repo.findOne({
+        where: { id },
+        relations: ['category'],
+      });
 
       if (!product) {
         throw new NotFoundException('Produto não encontrado.');

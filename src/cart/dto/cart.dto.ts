@@ -13,5 +13,8 @@ export class CartDto {
   _count: number;
 
   @Expose()
+  _totalPrice: number;
+
+  @Expose()
   message: string;
 }

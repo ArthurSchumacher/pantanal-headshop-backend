@@ -19,15 +19,16 @@ import { Public } from 'src/auth/decorators/is-public.decorator';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { ProductDto } from './dto/product.dto';
+import { ProductDetailsDto } from './dto/product-details.dto';
 
 @Controller('product')
-@Serialize(ProductDto)
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
   @UseGuards(AdminGuard)
   @UseInterceptors(FileInterceptor('image'))
+  @Serialize(ProductDto)
   create(
     @Body() createProductDto: CreateProductDto,
     @UploadedFile() image?: Express.Multer.File,
@@ -37,6 +38,7 @@ export class ProductController {
 
   @Public()
   @Get()
+  @Serialize(ProductDto)
   findAll(
     @Query('search') search: string,
     @Query('category') categoryId: string,
@@ -46,6 +48,7 @@ export class ProductController {
   }
 
   @Public()
+  @Serialize(ProductDetailsDto)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productService.findOne(+id);
@@ -53,12 +56,14 @@ export class ProductController {
 
   @Patch(':id')
   @UseGuards(AdminGuard)
+  @Serialize(ProductDto)
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productService.update(+id, updateProductDto);
   }
 
   @Delete(':id')
   @UseGuards(AdminGuard)
+  @Serialize(ProductDto)
   remove(@Param('id') id: string) {
     return this.productService.remove(+id);
   }
