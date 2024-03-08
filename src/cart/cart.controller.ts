@@ -29,7 +29,7 @@ export class CartController {
 
   @Get()
   findOne(@CurrentUser() user: string) {
-    return this.cartService.findOne(user, true);
+    return this.cartService.cartToFrontend(user);
   }
 
   @Patch()

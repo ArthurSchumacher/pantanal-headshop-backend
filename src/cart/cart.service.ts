@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { AddItemToCartDto } from './dto/add-item-to-cart.dto';
 import { CartProductService } from 'src/cart-product/cart-product.service';
 import { UpdateItemToCartDto } from './dto/update-item-to-cart.dto';
+import { CartProduct } from 'src/cart-product/entities/cart-product.entity';
 
 @Injectable()
 export class CartService {
@@ -36,10 +37,36 @@ export class CartService {
       throw new NotFoundException('Cart not found.');
     }
 
+    return cart;
+  }
+
+  async cartToFrontend(userId: string) {
+    const cart = await this.findOne(userId, true);
+
+    const _count = await this.countItems(cart.cartProduct);
+    const _subtotal = await this.cartSubtotal(cart.cartProduct);
+
     return {
       ...cart,
-      _count: relations ? cart.cartProduct.length : undefined,
+      _count,
+      _subtotal,
     };
+  }
+
+  async cartSubtotal(cartProduct: CartProduct[]) {
+    return cartProduct
+      .map((cartProduct) => {
+        return cartProduct.amount * cartProduct.product.price;
+      })
+      .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  }
+
+  async countItems(cartProduct: CartProduct[]) {
+    return cartProduct
+      .map((cartProduct) => {
+        return cartProduct.amount;
+      })
+      .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
   }
 
   async create(userId: string) {

@@ -13,7 +13,7 @@ export class CartDto {
   _count: number;
 
   @Expose()
-  _totalPrice: number;
+  _subtotal: number;
 
   @Expose()
   message: string;

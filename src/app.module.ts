@@ -17,6 +17,8 @@ import { StatusModule } from './status/status.module';
 import { PaymentModule } from './payment/payment.module';
 import { OrderModule } from './order/order.module';
 import { OrderProductModule } from './order-product/order-product.module';
+import { FavoriteModule } from './favorite/favorite.module';
+import { FavoriteProductModule } from './favorite-product/favorite-product.module';
 
 @Module({
   imports: [
@@ -38,6 +40,8 @@ import { OrderProductModule } from './order-product/order-product.module';
     PaymentModule,
     OrderModule,
     OrderProductModule,
+    FavoriteModule,
+    FavoriteProductModule,
   ],
   controllers: [AppController],
   providers: [
