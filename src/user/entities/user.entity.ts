@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -10,6 +11,7 @@ import { ROLE } from '../enums/role.enum';
 import { Address } from 'src/address/entities/address.entity';
 import { Cart } from 'src/cart/entities/cart.entity';
 import { Order } from 'src/order/entities/order.entity';
+import { Favorite } from 'src/favorite/entities/favorite.entity';
 
 @Entity()
 export class User {
@@ -42,6 +44,9 @@ export class User {
 
   @OneToMany(() => Address, (address) => address.user)
   addresses: Address[];
+
+  @OneToOne(() => Favorite, (favorite) => favorite.user, { nullable: true })
+  favorite?: Favorite;
 
   @OneToMany(() => Cart, (cart) => cart.user)
   carts: Cart[];

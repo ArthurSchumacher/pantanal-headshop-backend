@@ -1,5 +1,6 @@
 import { CartProduct } from 'src/cart-product/entities/cart-product.entity';
 import { Category } from 'src/category/entities/category.entity';
+import { FavoriteProduct } from 'src/favorite-product/entities/favorite-product.entity';
 import { OrderProduct } from 'src/order-product/entities/order-product.entity';
 import {
   Column,
@@ -51,4 +52,10 @@ export class Product {
 
   @OneToMany(() => OrderProduct, (orderProduct) => orderProduct.product)
   orderProduct: OrderProduct[];
+
+  @OneToMany(
+    () => FavoriteProduct,
+    (favoriteProduct) => favoriteProduct.product,
+  )
+  favoriteProduct?: FavoriteProduct[];
 }
