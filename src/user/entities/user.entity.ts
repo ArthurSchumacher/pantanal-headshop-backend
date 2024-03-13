@@ -3,7 +3,6 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -45,8 +44,8 @@ export class User {
   @OneToMany(() => Address, (address) => address.user)
   addresses: Address[];
 
-  @OneToOne(() => Favorite, (favorite) => favorite.user, { nullable: true })
-  favorite?: Favorite;
+  @OneToMany(() => Favorite, (favorite) => favorite.user)
+  favorites: Favorite[];
 
   @OneToMany(() => Cart, (cart) => cart.user)
   carts: Cart[];

@@ -3,8 +3,8 @@ import { User } from 'src/user/entities/user.entity';
 import {
   CreateDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -20,7 +20,7 @@ export class Favorite {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToOne(() => User, (user) => user.favorite)
+  @ManyToOne(() => User, (user) => user.favorites)
   user?: User;
 
   @OneToMany(

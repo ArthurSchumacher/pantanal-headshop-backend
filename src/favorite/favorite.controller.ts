@@ -1,34 +1,35 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Param } from '@nestjs/common';
 import { FavoriteService } from './favorite.service';
-import { CreateFavoriteDto } from './dto/create-favorite.dto';
-import { UpdateFavoriteDto } from './dto/update-favorite.dto';
+import { AddItemToFavoritesDto } from './dto/add-item-to-favorites.dto';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { FavoriteDto } from './dto/favorite.dto';
 
 @Controller('favorite')
+@Serialize(FavoriteDto)
 export class FavoriteController {
   constructor(private readonly favoriteService: FavoriteService) {}
 
   @Post()
-  create(@Body() createFavoriteDto: CreateFavoriteDto) {
-    return this.favoriteService.create(createFavoriteDto);
+  create(
+    @CurrentUser() user: string,
+    @Body() addItemToFavoritesDto: AddItemToFavoritesDto,
+  ) {
+    return this.favoriteService.saveItem(user, addItemToFavoritesDto);
   }
 
   @Get()
-  findAll() {
-    return this.favoriteService.findAll();
+  findAll(@CurrentUser() user: string) {
+    return this.favoriteService.findOne(user, true);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.favoriteService.findOne(+id);
+  @Delete()
+  delete(@CurrentUser() user: string) {
+    return this.favoriteService.remove(user);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFavoriteDto: UpdateFavoriteDto) {
-    return this.favoriteService.update(+id, updateFavoriteDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.favoriteService.remove(+id);
+  @Delete('/product/:id')
+  removeProduct(@CurrentUser() user: string, @Param('id') id: string) {
+    return this.favoriteService.removeItem(user, +id);
   }
 }

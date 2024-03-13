@@ -1,26 +1,85 @@
-import { Injectable } from '@nestjs/common';
-import { CreateFavoriteDto } from './dto/create-favorite.dto';
-import { UpdateFavoriteDto } from './dto/update-favorite.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Favorite } from './entities/favorite.entity';
+import { Repository } from 'typeorm';
+import { FavoriteProductService } from 'src/favorite-product/favorite-product.service';
+import { AddItemToFavoritesDto } from './dto/add-item-to-favorites.dto';
 
 @Injectable()
 export class FavoriteService {
-  create(createFavoriteDto: CreateFavoriteDto) {
-    return 'This action adds a new favorite';
+  constructor(
+    @InjectRepository(Favorite) private favoriteRepo: Repository<Favorite>,
+    private favoriteProductService: FavoriteProductService,
+  ) {}
+
+  async create(userId: string) {
+    return await this.favoriteRepo.save({
+      user: {
+        id: userId,
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all favorite`;
+  async findOne(userId: string, isRelations?: boolean) {
+    const relations = isRelations
+      ? {
+          favoriteProduct: {
+            product: true,
+          },
+          user: false,
+        }
+      : undefined;
+
+    const favorites = await this.favoriteRepo.findOne({
+      where: {
+        user: {
+          id: userId,
+        },
+      },
+      relations,
+    });
+
+    if (!favorites) {
+      throw new NotFoundException('Favorite not found.');
+    }
+
+    return favorites;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} favorite`;
+  async saveItem(
+    userId: string,
+    addItemToFavoritesDto: AddItemToFavoritesDto,
+  ): Promise<Favorite> {
+    const favorite = await this.findOne(userId).catch(async () => {
+      return await this.create(userId);
+    });
+
+    await this.favoriteProductService.insertProduct(
+      addItemToFavoritesDto,
+      favorite,
+    );
+
+    return favorite;
   }
 
-  update(id: number, updateFavoriteDto: UpdateFavoriteDto) {
-    return `This action updates a #${id} favorite`;
+  async removeItem(userId: string, productId: number) {
+    const favorite = await this.findOne(userId);
+    return await this.favoriteProductService.removeProduct(
+      productId,
+      favorite.id,
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} favorite`;
+  async remove(userId: string): Promise<Favorite> {
+    const favorite = await this.findOne(userId, true);
+
+    favorite.favoriteProduct.forEach(async (favoriteProduct) => {
+      return await this.favoriteProductService.removeProduct(
+        favoriteProduct.product.id,
+        favorite.id,
+      );
+    });
+
+    return this.favoriteRepo.remove(favorite);
   }
 }
