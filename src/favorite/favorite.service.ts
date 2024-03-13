@@ -70,7 +70,7 @@ export class FavoriteService {
     );
   }
 
-  async remove(userId: string): Promise<Favorite> {
+  async remove(userId: string) {
     const favorite = await this.findOne(userId, true);
 
     favorite.favoriteProduct.forEach(async (favoriteProduct) => {
@@ -80,6 +80,8 @@ export class FavoriteService {
       );
     });
 
-    return this.favoriteRepo.remove(favorite);
+    await this.favoriteRepo.remove(favorite);
+
+    return { message: 'Favoritos limpos com sucesso.' };
   }
 }
