@@ -53,7 +53,12 @@ export class ProductService {
     }
   }
 
-  async findAll(searchTerm?: string, categoryId?: string, size?: number) {
+  async findAll(
+    searchTerm?: string,
+    categoryId?: string,
+    size?: number,
+    page?: number,
+  ) {
     let whereClause = {};
 
     if (searchTerm) {
@@ -64,10 +69,13 @@ export class ProductService {
       whereClause = { category: { id: categoryId } };
     }
 
+    const skip = page && size ? size * (page - 1) : 0;
+
     const products = await this.repo.find({
       where: whereClause,
       relations: ['category'],
       take: size ? size : DEFAULT_PAGE_SIZE,
+      skip: skip,
     });
 
     const productsWithSignedUrls = await Promise.all(

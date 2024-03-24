@@ -30,7 +30,7 @@ export class OrderService {
         id: payment.id,
       },
       status: {
-        id: statusEnum.PENDING,
+        id: statusEnum.DONE,
       },
       user: {
         id: userId,

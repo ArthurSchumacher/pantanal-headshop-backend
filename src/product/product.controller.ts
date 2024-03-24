@@ -43,8 +43,9 @@ export class ProductController {
     @Query('search') search: string,
     @Query('category') categoryId: string,
     @Query('size') size?: string,
+    @Query('page') page?: string,
   ) {
-    return this.productService.findAll(search, categoryId, +size);
+    return this.productService.findAll(search, categoryId, +size, +page);
   }
 
   @Public()

@@ -9,7 +9,4 @@ export class UserDto {
 
   @Expose()
   typeUser: number;
-
-  @Expose()
-  access_token?: string;
 }
