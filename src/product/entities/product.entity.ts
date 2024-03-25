@@ -5,6 +5,7 @@ import { OrderProduct } from 'src/order-product/entities/order-product.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
@@ -43,6 +44,9 @@ export class Product {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at: Date;
 
   @ManyToOne(() => Category, (category) => category.products)
   category?: Category;

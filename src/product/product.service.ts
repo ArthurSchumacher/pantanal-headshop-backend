@@ -165,7 +165,7 @@ export class ProductService {
   async remove(id: number) {
     try {
       const product = await this.repo.findOne({ where: { id } });
-      return await this.repo.remove(product);
+      return await this.repo.softRemove(product);
     } catch (error) {
       throw new BadRequestException(
         `Falha ao remover produto. e: ${error.message}`,
