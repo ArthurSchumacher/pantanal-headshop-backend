@@ -53,6 +53,26 @@ export class ProductService {
     }
   }
 
+  async getTotalPages(searchTerm?: string, categoryId?: string, size?: number) {
+    let whereClause = {};
+
+    if (searchTerm) {
+      whereClause = { name: Like(`%${searchTerm}%`) };
+    }
+
+    if (categoryId) {
+      whereClause = { category: { id: categoryId } };
+    }
+
+    const totalCount = await this.repo.count({ where: whereClause });
+
+    const totalPages = Math.ceil(
+      totalCount / (size ? size : DEFAULT_PAGE_SIZE),
+    );
+
+    return totalPages;
+  }
+
   async findAll(
     searchTerm?: string,
     categoryId?: string,
@@ -64,9 +84,14 @@ export class ProductService {
     if (searchTerm) {
       whereClause = { name: Like(`%${searchTerm}%`) };
     }
-
     if (categoryId) {
       whereClause = { category: { id: categoryId } };
+    }
+    if (searchTerm && categoryId) {
+      whereClause = {
+        category: { id: categoryId },
+        name: Like(`%${searchTerm}%`),
+      };
     }
 
     const skip = page && size ? size * (page - 1) : 0;
@@ -78,6 +103,13 @@ export class ProductService {
       skip: skip,
     });
 
+    const totalCount = await this.repo.count({
+      where: whereClause,
+    });
+    const totalPages = Math.ceil(
+      totalCount / (size ? size : DEFAULT_PAGE_SIZE),
+    );
+
     const productsWithSignedUrls = await Promise.all(
       products.map(async (product) => {
         const { data } = await this.getSignedUrl(product.image);
@@ -86,7 +118,10 @@ export class ProductService {
       }),
     );
 
-    return productsWithSignedUrls;
+    return {
+      products: productsWithSignedUrls,
+      totalPages,
+    };
   }
 
   async getSignedUrl(imageName) {
