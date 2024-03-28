@@ -12,6 +12,8 @@ import { OrderService } from './order.service';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
 import { OrderStatusDto } from './dto/order-status.dto';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { FindAllDto } from './dto/find-all.dto';
 
 @Controller('order')
 export class OrderController {
@@ -29,6 +31,7 @@ export class OrderController {
 
   @UseGuards(AdminGuard)
   @Get('/admin')
+  @Serialize(FindAllDto)
   adminFindAll() {
     return this.orderService.adminFindAll();
   }

@@ -61,6 +61,7 @@ export class OrderService {
     return await this.orderRepo.find({
       relations: {
         status: true,
+        orderProduct: true,
       },
     });
   }
