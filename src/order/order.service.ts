@@ -9,12 +9,15 @@ import { CartService } from 'src/cart/cart.service';
 import { OrderProductService } from 'src/order-product/order-product.service';
 import { Payment } from 'src/payment/entities/payment.entity';
 import { Cart } from 'src/cart/entities/cart.entity';
+import { OrderStatusDto } from './dto/order-status.dto';
+import { StatusService } from 'src/status/status.service';
 
 @Injectable()
 export class OrderService {
   constructor(
     @InjectRepository(Order) private orderRepo: Repository<Order>,
     private paymentService: PaymentService,
+    private statusService: StatusService,
     private cartService: CartService,
     private orderProductService: OrderProductService,
   ) {}
@@ -52,6 +55,35 @@ export class OrderService {
         );
       }),
     );
+  }
+
+  async adminFindAll() {
+    return await this.orderRepo.find({
+      relations: {
+        status: true,
+      },
+    });
+  }
+
+  async adminFindOne(id: string) {
+    return await this.orderRepo.findOne({
+      where: { id },
+      relations: {
+        orderProduct: {
+          product: true,
+        },
+        payment: true,
+        status: true,
+        address: true,
+      },
+    });
+  }
+
+  async adminUpdateOrderStatus(id: string, orderStatusDto: OrderStatusDto) {
+    const order = await this.orderRepo.findOne({ where: { id } });
+    const status = await this.statusService.findOne(orderStatusDto.statusId);
+    order.status = status;
+    return await this.orderRepo.save(order);
   }
 
   async createOrder(userId: string, createOrderDto: CreateOrderDto) {

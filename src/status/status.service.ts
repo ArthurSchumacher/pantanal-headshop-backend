@@ -14,6 +14,14 @@ export class StatusService {
     return this.statusRepo.save(createStatusDto);
   }
 
+  async findAll() {
+    return await this.statusRepo.find();
+  }
+
+  async findOne(id: number) {
+    return await this.statusRepo.findOne({ where: { id } });
+  }
+
   async delete(id: number) {
     const status = await this.statusRepo.findOne({ where: { id } });
 

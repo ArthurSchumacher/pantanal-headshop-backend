@@ -6,12 +6,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PaymentModule } from 'src/payment/payment.module';
 import { CartModule } from 'src/cart/cart.module';
 import { OrderProductModule } from 'src/order-product/order-product.module';
+import { StatusModule } from 'src/status/status.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Order]),
     PaymentModule,
     CartModule,
+    StatusModule,
     OrderProductModule,
   ],
   providers: [OrderService],

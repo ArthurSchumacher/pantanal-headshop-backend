@@ -20,7 +20,7 @@ import { AdminGuard } from 'src/auth/guards/admin.guard';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { ProductDto } from './dto/product.dto';
 import { ProductDetailsDto } from './dto/product-details.dto';
-import { ReturnAllProducts } from './dto/return-all-products';
+import { ReturnAllProducts } from './dto/return-all-products.dto';
 
 @Controller('product')
 export class ProductController {

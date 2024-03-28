@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   Post,
   UseGuards,
@@ -21,6 +22,12 @@ export class StatusController {
   @Post()
   create(@Body() createStatusDto: CreateStatusDto) {
     return this.statusService.create(createStatusDto);
+  }
+
+  @UseGuards(AdminGuard)
+  @Get()
+  findAll() {
+    return this.statusService.findAll();
   }
 
   @UseGuards(AdminGuard)
