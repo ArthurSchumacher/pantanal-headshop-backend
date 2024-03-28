@@ -76,7 +76,7 @@ export class AddressService {
   async remove(id: string) {
     try {
       const address = await this.findOne(id);
-      return await this.repo.remove(address);
+      return await this.repo.softRemove(address);
     } catch (error) {
       throw new BadRequestException('Falha ao remover endereço.');
     }
