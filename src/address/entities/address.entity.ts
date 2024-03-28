@@ -2,10 +2,13 @@ import { Order } from 'src/order/entities/order.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -33,6 +36,15 @@ export class Address {
 
   @Column()
   uf: string;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at: Date;
 
   @ManyToOne(() => User, (user) => user.addresses)
   user?: User;
