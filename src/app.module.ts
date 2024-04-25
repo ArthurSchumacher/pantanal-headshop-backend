@@ -19,6 +19,7 @@ import { OrderModule } from './order/order.module';
 import { OrderProductModule } from './order-product/order-product.module';
 import { FavoriteModule } from './favorite/favorite.module';
 import { FavoriteProductModule } from './favorite-product/favorite-product.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { FavoriteProductModule } from './favorite-product/favorite-product.modul
     OrderProductModule,
     FavoriteModule,
     FavoriteProductModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [
