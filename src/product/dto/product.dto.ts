@@ -18,6 +18,9 @@ export class ProductDto {
   sale: boolean;
 
   @Expose()
+  description: boolean;
+
+  @Expose()
   discount: number;
 
   @Expose()
