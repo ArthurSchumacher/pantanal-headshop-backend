@@ -7,7 +7,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { Like, Repository } from 'typeorm';
+import { ILike, Like, Repository } from 'typeorm';
 import { CategoryService } from 'src/category/category.service';
 import { SupabaseService } from 'src/supabase.service';
 
@@ -82,7 +82,7 @@ export class ProductService {
     let whereClause = {};
 
     if (searchTerm) {
-      whereClause = { name: Like(`%${searchTerm}%`) };
+      whereClause = { name: ILike(`%${searchTerm}%`) };
     }
     if (categoryId) {
       whereClause = { category: { id: categoryId } };
@@ -90,7 +90,7 @@ export class ProductService {
     if (searchTerm && categoryId) {
       whereClause = {
         category: { id: categoryId },
-        name: Like(`%${searchTerm}%`),
+        name: ILike(`%${searchTerm}%`),
       };
     }
 
